@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Скачать аудио с YouTube</title>
+  <style>
+    body{font-family:sans-serif;margin:2rem;}
+    input{padding:.5rem;width:60%;}
+    button{padding:.5rem 1rem;margin-left:.5rem;}
+  </style>
+</head>
+<body>
+  <h1>Скачать аудио с YouTube</h1>
+
+  <form id="form">
+    <input type="url" id="url" placeholder="https://www.youtube.com/watch?v=..." required>
+    <button type="submit">Скачать</button>
+  </form>
+
+  <script>
+    document.getElementById('form').addEventListener('submit', e => {
+      e.preventDefault();
+    
+      const videoURL = document.getElementById('url').value.trim();
+      if (!videoURL) return;
+    
+      const id = videoURL
+        .replace(/^.*[?&]v=([^&]+).*$/, '$1')
+        .replace(/[^\w-]+/g, '_')
+        .slice(0, 40);
+      const fileName = `${id || 'audio'}.m4a`;
+
+      const a = document.createElement('a');
+      a.href = `/api/download?url=${encodeURIComponent(videoURL)}`;
+      a.download = fileName;
+      a.style.display = 'none';
+      document.body.append(a);
+      a.click();
+      a.remove();
+    });
+    </script>
+</body>
+</html>
